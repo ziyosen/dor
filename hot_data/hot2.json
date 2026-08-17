@@ -189,13 +189,13 @@
         "detail": "Supported payment: E-wallet & QRIS",
         "packages": [
             {
-                "family_name": "Akrab",
-                "family_code": "19134305-27f1-48ea-be9d-afc425e60aca",
+                "family_name": "Bonus Paket Akrab",
+                "family_code": "a677d649-3c5a-46c2-a043-cb69ac841208",
                 "is_enterprise": false,
                 "migration_type": "NONE",
-                "variant_code": "18900b67-c447-4e31-b9e1-ab4335a1b512",
-                "option_name": "Akrab",
-                "order": 1
+                "variant_code": "dafb26ca-cb3e-4b3d-a8eb-2447fef35f6a",
+                "option_name": "Bonus Paket Akrab",
+                "order": 4
             },
             {
                 "family_name": "Night Quota",
