@@ -22,7 +22,6 @@ def settlement_qris(
     topup_number: str = "",
     stage_token: str = "",
 ):  
-    # Sanity check
     if overwrite_amount == -1 and not ask_overwrite:
         print("Either ask_overwrite must be True or overwrite_amount must be set.")
         return None
@@ -35,8 +34,6 @@ def settlement_qris(
         payment_targets += item["item_code"]
 
     amount_int = 0
-    
-    # Determine amount to use - FIXED
     if overwrite_amount != -1:
         amount_int = overwrite_amount
     elif amount_idx >= 0 and amount_idx < len(items):
@@ -44,7 +41,6 @@ def settlement_qris(
     else:
         amount_int = items[-1]["item_price"] if items else 0
 
-    # If Overwrite
     if ask_overwrite:
         print(f"Total amount is {amount_int}.\nEnter new amount if you need to overwrite.")
         amount_str = input("Press enter to ignore & use default amount: ")
@@ -56,7 +52,6 @@ def settlement_qris(
     
     intercept_page(api_key, tokens, items[0]["item_code"], False)
     
-    # Get payment methods
     payment_path = "payments/api/v8/payment-methods-option"
     payment_payload = {
         "payment_type": "PURCHASE",
@@ -79,19 +74,16 @@ def settlement_qris(
     token_payment = payment_res["data"]["token_payment"]
     ts_to_sign = payment_res["data"]["timestamp"]
     
-    # BERSIHKAN ITEMS - GUNAKAN token_confirmation yang SAMA untuk semua
-    clean_items = []
-    for item in items:
-        clean_item = {
-            "item_code": item["item_code"],
-            "item_price": item["item_price"],
-            "item_name": item["item_name"],
-            "tax": item["tax"],
-            "token_confirmation": token_confirmation,  # SAMA untuk semua
-        }
-        clean_items.append(clean_item)
+    # KIRIM HANYA 1 ITEM (item yang dipilih untuk QRIS)
+    selected_item = items[token_confirmation_idx]
+    clean_items = [{
+        "item_code": selected_item["item_code"],
+        "item_price": selected_item["item_price"],
+        "item_name": selected_item["item_name"],
+        "tax": selected_item["tax"],
+        "token_confirmation": token_confirmation,
+    }]
     
-    # Settlement request - TANPA akrab dan combo_details
     path = "payments/api/v8/settlement-multipayment/qris"
     settlement_payload = {
         "can_trigger_rating": False,
@@ -126,7 +118,6 @@ def settlement_qris(
         "timestamp": int(time.time()),
     }
     
-    # Tambahkan topup_number dan stage_token hanya jika tidak kosong
     if topup_number:
         settlement_payload["topup_number"] = topup_number
     if stage_token:
@@ -134,8 +125,8 @@ def settlement_qris(
     
     # DEBUG
     print("=" * 50)
-    print("DEBUG: Settlement payload (SEBELUM encrypt):")
-    print(json.dumps(settlement_payload, indent=2, default=str))
+    print("DEBUG: Clean items (HANYA 1 item):")
+    print(json.dumps(clean_items, indent=2, default=str))
     print("=" * 50)
     
     encrypted_payload = encryptsign_xdata(
