@@ -42,7 +42,6 @@ def settlement_qris(
     elif amount_idx >= 0 and amount_idx < len(items):
         amount_int = items[amount_idx]["item_price"]
     else:
-        # Fallback ke item terakhir
         amount_int = items[-1]["item_price"] if items else 0
 
     # If Overwrite
@@ -54,11 +53,10 @@ def settlement_qris(
                 amount_int = int(amount_str)
             except ValueError:
                 print("Invalid overwrite input, using original price.")
-                # return None
     
     intercept_page(api_key, tokens, items[0]["item_code"], False)
     
-    # Get payment methods - FIXED: tambah payment_for dan total_amount
+    # Get payment methods
     payment_path = "payments/api/v8/payment-methods-option"
     payment_payload = {
         "payment_type": "PURCHASE",
@@ -93,7 +91,7 @@ def settlement_qris(
         }
         clean_items.append(clean_item)
     
-    # Settlement request
+    # Settlement request - HAPUS "coupon" yang kosong
     path = "payments/api/v8/settlement-multipayment/qris"
     settlement_payload = {
         "akrab": {
@@ -103,7 +101,6 @@ def settlement_qris(
         },
         "can_trigger_rating": False,
         "total_discount": 0,
-        "coupon": "",
         "payment_for": payment_for,
         "topup_number": topup_number,
         "stage_token": stage_token,
@@ -150,6 +147,8 @@ def settlement_qris(
     print("=" * 50)
     print("DEBUG: Clean items:")
     print(json.dumps(clean_items, indent=2, default=str))
+    print("DEBUG: Settlement payload (SEBELUM encrypt):")
+    print(json.dumps(settlement_payload, indent=2, default=str))
     print("=" * 50)
     
     encrypted_payload = encryptsign_xdata(
