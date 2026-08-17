@@ -78,22 +78,21 @@ def settlement_qris(
     settlement_payload = {
         "akrab": {
             "akrab_members": [],
-            "akrab_parent_alias": "0",
+            "akrab_parent_alias": "",
             "members": []
         },
         "can_trigger_rating": False,
         "total_discount": 0,
-        "coupon": "0",
         "payment_for": payment_for,
-        "topup_number": topup_number if topup_number else "0",
-        "stage_token": stage_token if stage_token else "0",
+        "topup_number": topup_number,
+        "stage_token": stage_token,
         "is_enterprise": False,
         "autobuy": {
             "is_using_autobuy": False,
-            "activated_autobuy_code": "0",
+            "activated_autobuy_code": "",
             "autobuy_threshold_setting": {
-                "label": "0",
-                "type": "0",
+                "label": "",
+                "type": "",
                 "value": 0
             }
         },
@@ -106,9 +105,9 @@ def settlement_qris(
             "spend_limit_amount": 0,
             "is_spend_limit": False,
             "tax": 0,
-            "benefit_type": "0",
+            "benefit_type": "",
             "quota_bonus": 0,
-            "cashtag": "0",
+            "cashtag": "",
             "is_family_plan": False,
             "combo_details": [],
             "is_switch_plan": False,
