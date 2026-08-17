@@ -96,8 +96,6 @@ def settlement_qris(
         "can_trigger_rating": False,
         "total_discount": 0,
         "payment_for": payment_for,
-        "topup_number": topup_number,
-        "stage_token": stage_token,
         "is_enterprise": False,
         "autobuy": {
             "is_using_autobuy": False,
@@ -136,6 +134,12 @@ def settlement_qris(
         "payment_method": "QRIS",
         "timestamp": int(time.time()),
     }
+    
+    # HANYA tambah kalau tidak kosong
+    if topup_number:
+        settlement_payload["topup_number"] = topup_number
+    if stage_token:
+        settlement_payload["stage_token"] = stage_token
     
     encrypted_payload = encryptsign_xdata(
         api_key=api_key,
