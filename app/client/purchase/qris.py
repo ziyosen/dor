@@ -79,7 +79,7 @@ def settlement_qris(
     token_payment = payment_res["data"]["token_payment"]
     ts_to_sign = payment_res["data"]["timestamp"]
     
-    # BERSIHKAN ITEMS - HAPUS product_type
+    # BERSIHKAN ITEMS - GUNAKAN token_confirmation yang SAMA untuk semua
     clean_items = []
     for item in items:
         clean_item = {
@@ -87,7 +87,7 @@ def settlement_qris(
             "item_price": item["item_price"],
             "item_name": item["item_name"],
             "tax": item["tax"],
-            "token_confirmation": item["token_confirmation"],
+            "token_confirmation": token_confirmation,  # SAMA untuk semua
         }
         clean_items.append(clean_item)
     
@@ -139,8 +139,8 @@ def settlement_qris(
     
     # DEBUG
     print("=" * 50)
-    print("DEBUG: Settlement payload (SEBELUM encrypt):")
-    print(json.dumps(settlement_payload, indent=2, default=str))
+    print("DEBUG: Clean items (dengan token_confirmation yang sama):")
+    print(json.dumps(clean_items, indent=2, default=str))
     print("=" * 50)
     
     encrypted_payload = encryptsign_xdata(
