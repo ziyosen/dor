@@ -204,10 +204,10 @@
                 "migration_type": "NONE",
                 "variant_code": "b50f954a-696e-46d0-8700-8e4d38521525",
                 "option_name": "EWALLET & QRIS 1K",
-                "order": 24
+                "order": 27
             }
         ],
-        "payment_for": "ANY",
+        "payment_for": "SHARE_PACKAGE",
         "ask_overwrite": false,
         "overwrite_amount": 1000,
         "token_confirmation_idx": 1,
