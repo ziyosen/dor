@@ -192,7 +192,7 @@
                 "family_name": "Akrab",
                 "family_code": "19134305-27f1-48ea-be9d-afc425e60aca",
                 "is_enterprise": false,
-                "migration_type": "PRIOH_TO_PRIO",
+                "migration_type": "NONE",
                 "variant_code": "18900b67-c447-4e31-b9e1-ab4335a1b512",
                 "option_name": "Akrab",
                 "order": 1
