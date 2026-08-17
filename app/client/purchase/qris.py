@@ -74,26 +74,37 @@ def settlement_qris(
     token_payment = payment_res["data"]["token_payment"]
     ts_to_sign = payment_res["data"]["timestamp"]
     
+    clean_items = []
+    for item in items:
+        clean_item = {
+            "item_code": item["item_code"],
+            "product_type": item.get("product_type", "PACKAGE"),
+            "item_price": item["item_price"],
+            "item_name": item["item_name"],
+            "tax": item["tax"],
+            "token_confirmation": token_confirmation,
+        }
+        clean_items.append(clean_item)
+    
     path = "payments/api/v8/settlement-multipayment/qris"
     settlement_payload = {
         "akrab": {
             "akrab_members": [],
-            "akrab_parent_alias": "0",
+            "akrab_parent_alias": "",
             "members": []
         },
         "can_trigger_rating": False,
         "total_discount": 0,
-        "coupon": "0",
         "payment_for": payment_for,
-        "topup_number": topup_number if topup_number else "0",
-        "stage_token": stage_token if stage_token else "0",
+        "topup_number": topup_number,
+        "stage_token": stage_token,
         "is_enterprise": False,
         "autobuy": {
             "is_using_autobuy": False,
-            "activated_autobuy_code": "0",
+            "activated_autobuy_code": "",
             "autobuy_threshold_setting": {
-                "label": "0",
-                "type": "0",
+                "label": "",
+                "type": "",
                 "value": 0
             }
         },
@@ -102,13 +113,13 @@ def settlement_qris(
         "additional_data": {
             "original_price": items[0]["item_price"],
             "is_spend_limit_temporary": False,
-            "migration_type": "NONE",
+            "migration_type": "",
             "spend_limit_amount": 0,
             "is_spend_limit": False,
             "tax": 0,
-            "benefit_type": "0",
+            "benefit_type": "",
             "quota_bonus": 0,
-            "cashtag": "0",
+            "cashtag": "",
             "is_family_plan": False,
             "combo_details": [],
             "is_switch_plan": False,
@@ -120,7 +131,7 @@ def settlement_qris(
         "total_fee": 0,
         "is_use_point": False,
         "lang": "en",
-        "items": items,
+        "items": clean_items,
         "verification_token": token_payment,
         "payment_method": "QRIS",
         "timestamp": int(time.time()),
