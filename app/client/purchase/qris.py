@@ -91,26 +91,20 @@ def settlement_qris(
         }
         clean_items.append(clean_item)
     
-    # Settlement request - HAPUS "coupon" yang kosong
+    # Settlement request - HAPUS SEMUA STRING KOSONG
     path = "payments/api/v8/settlement-multipayment/qris"
     settlement_payload = {
         "akrab": {
             "akrab_members": [],
-            "akrab_parent_alias": "",
             "members": []
         },
         "can_trigger_rating": False,
         "total_discount": 0,
         "payment_for": payment_for,
-        "topup_number": topup_number,
-        "stage_token": stage_token,
         "is_enterprise": False,
         "autobuy": {
             "is_using_autobuy": False,
-            "activated_autobuy_code": "",
             "autobuy_threshold_setting": {
-                "label": "0",
-                "type": "0",
                 "value": 0
             }
         },
@@ -123,9 +117,7 @@ def settlement_qris(
             "spend_limit_amount": 0,
             "is_spend_limit": False,
             "tax": 0,
-            "benefit_type": "",
             "quota_bonus": 0,
-            "cashtag": "",
             "is_family_plan": False,
             "combo_details": [],
             "is_switch_plan": False,
@@ -143,10 +135,14 @@ def settlement_qris(
         "timestamp": int(time.time()),
     }
     
+    # Tambahkan topup_number dan stage_token hanya jika tidak kosong
+    if topup_number:
+        settlement_payload["topup_number"] = topup_number
+    if stage_token:
+        settlement_payload["stage_token"] = stage_token
+    
     # DEBUG
     print("=" * 50)
-    print("DEBUG: Clean items:")
-    print(json.dumps(clean_items, indent=2, default=str))
     print("DEBUG: Settlement payload (SEBELUM encrypt):")
     print(json.dumps(settlement_payload, indent=2, default=str))
     print("=" * 50)
