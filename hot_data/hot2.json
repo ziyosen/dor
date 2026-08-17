@@ -207,7 +207,7 @@
                 "order": 1
             }
         ],
-        "payment_for": "CHANGE_PP",
+        "payment_for": "SHARE_PACKAGE",
         "ask_overwrite": false,
         "overwrite_amount": 1200,
         "token_confirmation_idx": 1,
