@@ -22,7 +22,6 @@ def settlement_qris(
     topup_number: str = "",
     stage_token: str = "",
 ):  
-    # Sanity check
     if overwrite_amount == -1 and not ask_overwrite:
         print("Either ask_overwrite must be True or overwrite_amount must be set.")
         return None
@@ -35,14 +34,13 @@ def settlement_qris(
         payment_targets += item["item_code"]
 
     amount_int = 0
-    
-    # Determine amount to use
     if overwrite_amount != -1:
         amount_int = overwrite_amount
-    elif amount_idx == -1:
+    elif amount_idx >= 0 and amount_idx < len(items):
         amount_int = items[amount_idx]["item_price"]
+    else:
+        amount_int = items[-1]["item_price"] if items else 0
 
-    # If Overwrite
     if ask_overwrite:
         print(f"Total amount is {amount_int}.\nEnter new amount if you need to overwrite.")
         amount_str = input("Press enter to ignore & use default amount: ")
@@ -54,7 +52,6 @@ def settlement_qris(
     
     intercept_page(api_key, tokens, items[0]["item_code"], False)
     
-    # Get payment methods
     payment_path = "payments/api/v8/payment-methods-option"
     payment_payload = {
         "payment_type": "PURCHASE",
@@ -62,7 +59,9 @@ def settlement_qris(
         "payment_target": items[token_confirmation_idx]["item_code"],
         "lang": "en",
         "is_referral": False,
-        "token_confirmation": token_confirmation
+        "token_confirmation": token_confirmation,
+        "payment_for": payment_for,
+        "total_amount": amount_int,
     }
     
     print("Getting payment methods...")
@@ -75,28 +74,27 @@ def settlement_qris(
     token_payment = payment_res["data"]["token_payment"]
     ts_to_sign = payment_res["data"]["timestamp"]
     
-    # Settlement request
     path = "payments/api/v8/settlement-multipayment/qris"
     settlement_payload = {
         "akrab": {
             "akrab_members": [],
-            "akrab_parent_alias": "",
+            "akrab_parent_alias": "0",
             "members": []
         },
         "can_trigger_rating": False,
         "total_discount": 0,
-        "coupon": "",
+        "coupon": "0",
         "payment_for": payment_for,
-        "topup_number": topup_number,
-        "stage_token": stage_token,
+        "topup_number": topup_number if topup_number else "0",
+        "stage_token": stage_token if stage_token else "0",
         "is_enterprise": False,
         "autobuy": {
             "is_using_autobuy": False,
-            "activated_autobuy_code": "",
+            "activated_autobuy_code": "0",
             "autobuy_threshold_setting": {
-            "label": "",
-            "type": "",
-            "value": 0
+                "label": "0",
+                "type": "0",
+                "value": 0
             }
         },
         "access_token": tokens["access_token"],
@@ -104,13 +102,13 @@ def settlement_qris(
         "additional_data": {
             "original_price": items[0]["item_price"],
             "is_spend_limit_temporary": False,
-            "migration_type": "",
+            "migration_type": "NONE",
             "spend_limit_amount": 0,
             "is_spend_limit": False,
             "tax": 0,
-            "benefit_type": "",
+            "benefit_type": "0",
             "quota_bonus": 0,
-            "cashtag": "",
+            "cashtag": "0",
             "is_family_plan": False,
             "combo_details": [],
             "is_switch_plan": False,
