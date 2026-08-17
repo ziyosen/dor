@@ -146,7 +146,7 @@ def show_hot_menu2():
                     payment_items.append(
                         PaymentItem(
                             item_code=package_detail["package_option"]["package_option_code"],
-                            product_type="PACKAGE",
+                            product_type="",
                             item_price=package_detail["package_option"]["price"],
                             item_name=package_detail["package_option"]["name"],
                             tax=0,
