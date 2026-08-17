@@ -36,11 +36,14 @@ def settlement_qris(
 
     amount_int = 0
     
-    # Determine amount to use
+    # Determine amount to use - FIXED
     if overwrite_amount != -1:
         amount_int = overwrite_amount
-    elif amount_idx == -1:
+    elif amount_idx >= 0 and amount_idx < len(items):
         amount_int = items[amount_idx]["item_price"]
+    else:
+        # Fallback ke item terakhir
+        amount_int = items[-1]["item_price"] if items else 0
 
     # If Overwrite
     if ask_overwrite:
@@ -55,7 +58,7 @@ def settlement_qris(
     
     intercept_page(api_key, tokens, items[0]["item_code"], False)
     
-    # Get payment methods
+    # Get payment methods - FIXED: tambah payment_for dan total_amount
     payment_path = "payments/api/v8/payment-methods-option"
     payment_payload = {
         "payment_type": "PURCHASE",
@@ -63,7 +66,9 @@ def settlement_qris(
         "payment_target": items[token_confirmation_idx]["item_code"],
         "lang": "en",
         "is_referral": False,
-        "token_confirmation": token_confirmation
+        "token_confirmation": token_confirmation,
+        "payment_for": payment_for,
+        "total_amount": amount_int,
     }
     
     print("Getting payment methods...")
