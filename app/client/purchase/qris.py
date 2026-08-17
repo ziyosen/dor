@@ -91,13 +91,9 @@ def settlement_qris(
         }
         clean_items.append(clean_item)
     
-    # Settlement request - VERSI MINIMAL
+    # Settlement request - TANPA akrab dan combo_details
     path = "payments/api/v8/settlement-multipayment/qris"
     settlement_payload = {
-        "akrab": {
-            "akrab_members": [],
-            "members": []
-        },
         "can_trigger_rating": False,
         "total_discount": 0,
         "payment_for": payment_for,
@@ -115,7 +111,6 @@ def settlement_qris(
             "tax": 0,
             "quota_bonus": 0,
             "is_family_plan": False,
-            "combo_details": [],
             "is_switch_plan": False,
             "discount_recurring": 0,
             "has_bonus": False,
@@ -139,8 +134,8 @@ def settlement_qris(
     
     # DEBUG
     print("=" * 50)
-    print("DEBUG: Clean items (dengan token_confirmation yang sama):")
-    print(json.dumps(clean_items, indent=2, default=str))
+    print("DEBUG: Settlement payload (SEBELUM encrypt):")
+    print(json.dumps(settlement_payload, indent=2, default=str))
     print("=" * 50)
     
     encrypted_payload = encryptsign_xdata(
