@@ -81,6 +81,18 @@ def settlement_qris(
     token_payment = payment_res["data"]["token_payment"]
     ts_to_sign = payment_res["data"]["timestamp"]
     
+    # BERSIHKAN ITEMS - HAPUS product_type
+    clean_items = []
+    for item in items:
+        clean_item = {
+            "item_code": item["item_code"],
+            "item_price": item["item_price"],
+            "item_name": item["item_name"],
+            "tax": item["tax"],
+            "token_confirmation": item["token_confirmation"],
+        }
+        clean_items.append(clean_item)
+    
     # Settlement request
     path = "payments/api/v8/settlement-multipayment/qris"
     settlement_payload = {
@@ -100,9 +112,9 @@ def settlement_qris(
             "is_using_autobuy": False,
             "activated_autobuy_code": "",
             "autobuy_threshold_setting": {
-            "label": "",
-            "type": "",
-            "value": 0
+                "label": "0",
+                "type": "0",
+                "value": 0
             }
         },
         "access_token": tokens["access_token"],
@@ -110,7 +122,7 @@ def settlement_qris(
         "additional_data": {
             "original_price": items[0]["item_price"],
             "is_spend_limit_temporary": False,
-            "migration_type": "",
+            "migration_type": "NONE",
             "spend_limit_amount": 0,
             "is_spend_limit": False,
             "tax": 0,
@@ -128,11 +140,17 @@ def settlement_qris(
         "total_fee": 0,
         "is_use_point": False,
         "lang": "en",
-        "items": items,
+        "items": clean_items,
         "verification_token": token_payment,
         "payment_method": "QRIS",
         "timestamp": int(time.time()),
     }
+    
+    # DEBUG
+    print("=" * 50)
+    print("DEBUG: Clean items:")
+    print(json.dumps(clean_items, indent=2, default=str))
+    print("=" * 50)
     
     encrypted_payload = encryptsign_xdata(
         api_key=api_key,
