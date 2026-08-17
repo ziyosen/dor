@@ -74,35 +74,55 @@ def settlement_qris(
     token_payment = payment_res["data"]["token_payment"]
     ts_to_sign = payment_res["data"]["timestamp"]
     
-    # KIRIM HANYA 1 ITEM (item yang dipilih untuk QRIS)
-    selected_item = items[token_confirmation_idx]
-    clean_items = [{
-        "item_code": selected_item["item_code"],
-        "item_price": selected_item["item_price"],
-        "item_name": selected_item["item_name"],
-        "tax": selected_item["tax"],
-        "token_confirmation": token_confirmation,
-    }]
+    # KIRIM SEMUA ITEMS - seperti format awal yang benar
+    clean_items = []
+    for item in items:
+        clean_item = {
+            "item_code": item["item_code"],
+            "item_price": item["item_price"],
+            "item_name": item["item_name"],
+            "tax": item["tax"],
+            "token_confirmation": token_confirmation,
+        }
+        clean_items.append(clean_item)
     
     path = "payments/api/v8/settlement-multipayment/qris"
     settlement_payload = {
+        "akrab": {
+            "akrab_members": [],
+            "akrab_parent_alias": "",
+            "members": []
+        },
         "can_trigger_rating": False,
         "total_discount": 0,
+        "coupon": "",
         "payment_for": payment_for,
+        "topup_number": topup_number,
+        "stage_token": stage_token,
         "is_enterprise": False,
         "autobuy": {
             "is_using_autobuy": False,
+            "activated_autobuy_code": "",
+            "autobuy_threshold_setting": {
+                "label": "",
+                "type": "",
+                "value": 0
+            }
         },
         "access_token": tokens["access_token"],
         "is_myxl_wallet": False,
         "additional_data": {
             "original_price": items[0]["item_price"],
             "is_spend_limit_temporary": False,
+            "migration_type": "",
             "spend_limit_amount": 0,
             "is_spend_limit": False,
             "tax": 0,
+            "benefit_type": "",
             "quota_bonus": 0,
+            "cashtag": "",
             "is_family_plan": False,
+            "combo_details": [],
             "is_switch_plan": False,
             "discount_recurring": 0,
             "has_bonus": False,
@@ -117,17 +137,6 @@ def settlement_qris(
         "payment_method": "QRIS",
         "timestamp": int(time.time()),
     }
-    
-    if topup_number:
-        settlement_payload["topup_number"] = topup_number
-    if stage_token:
-        settlement_payload["stage_token"] = stage_token
-    
-    # DEBUG
-    print("=" * 50)
-    print("DEBUG: Clean items (HANYA 1 item):")
-    print(json.dumps(clean_items, indent=2, default=str))
-    print("=" * 50)
     
     encrypted_payload = encryptsign_xdata(
         api_key=api_key,
