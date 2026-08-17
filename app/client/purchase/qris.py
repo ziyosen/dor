@@ -91,7 +91,7 @@ def settlement_qris(
         }
         clean_items.append(clean_item)
     
-    # Settlement request - HAPUS SEMUA STRING KOSONG
+    # Settlement request - VERSI MINIMAL
     path = "payments/api/v8/settlement-multipayment/qris"
     settlement_payload = {
         "akrab": {
@@ -104,16 +104,12 @@ def settlement_qris(
         "is_enterprise": False,
         "autobuy": {
             "is_using_autobuy": False,
-            "autobuy_threshold_setting": {
-                "value": 0
-            }
         },
         "access_token": tokens["access_token"],
         "is_myxl_wallet": False,
         "additional_data": {
             "original_price": items[0]["item_price"],
             "is_spend_limit_temporary": False,
-            "migration_type": "NONE",
             "spend_limit_amount": 0,
             "is_spend_limit": False,
             "tax": 0,
