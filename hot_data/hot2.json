@@ -210,7 +210,7 @@
         "payment_for": "CHANGE_PP",
         "ask_overwrite": false,
         "overwrite_amount": 1200,
-        "token_confirmation_idx": 1,
+        "token_confirmation_idx": 0,
         "amount_idx": -1
     }
 ]
