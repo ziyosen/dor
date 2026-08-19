@@ -190,12 +190,12 @@
         "packages": [
             {
                 "family_name": "Bonus Paket Akrab",
-                "family_code": "a677d649-3c5a-46c2-a043-cb69ac841208",
+                "family_code": "23ddccc0-ac04-4e80-a939-5f5d76f4bc64",
                 "is_enterprise": false,
-                "migration_type": "NONE",
-                "variant_code": "dafb26ca-cb3e-4b3d-a8eb-2447fef35f6a",
+                "migration_type": "PRIOH_TO_PRIO",
+                "variant_code": "N/A",
                 "option_name": "Bonus Paket Akrab",
-                "order": 4
+                "order": 1
             },
             {
                 "family_name": "Night Quota",
