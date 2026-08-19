@@ -184,33 +184,42 @@
         "amount_idx": -1
     },
     {
-        "name": "BPA S 1K",
-        "price": "Rp1000",
-        "detail": "Supported payment: E-wallet & QRIS",
-        "packages": [
-            {
-                "family_name": "Bonus Paket Akrab",
-                "family_code": "23ddccc0-ac04-4e80-a939-5f5d76f4bc64",
-                "is_enterprise": false,
-                "migration_type": "PRIOH_TO_PRIO",
-                "variant_code": "N/A",
-                "option_name": "Bonus Paket Akrab",
-                "order": 1
-            },
-            {
-                "family_name": "Night Quota",
-                "family_code": "64e63f53-6889-4d12-a0b4-ef9ea77b9efc",
-                "is_enterprise": false,
-                "migration_type": "NONE",
-                "variant_code": "7a0c3e7e-d5b7-480a-b161-50301a9dcdfd",
-                "option_name": "Xtra Kuota",
-                "order": 1
-            }
-        ],
-        "payment_for": "SHARE_PACKAGE",
-        "ask_overwrite": false,
-        "overwrite_amount": 1200,
-        "token_confirmation_idx": 1,
-        "amount_idx": -1
-    }
+        "{
+    "name": "BPA S 1K",
+    "price": "Rp1000",
+    "detail": "Supported payment: E-wallet & QRIS",
+    "packages": [
+        {
+            "family_name": "Bonus Aktivasi",
+            "family_code": "0069ab97-3e54-41ef-87ea-807621d1922c",
+            "is_enterprise": false,
+            "migration_type": "NONE",
+            "variant_code": "df0ac3ee-d810-42bb-820e-961e8c3bb6bc",
+            "option_name": "Bonus Aktivasi",
+            "order": 1
+    
+                    "id": "665198_FRESH",
+                    "name": "Kuota Pelanggan Baru",
+                    "type": "DATA",
+                    "quota": "10.00 GB / 10.00 GB"
+        
+            "quota_code": "U0NfXwSMsAHTNWhfX3rXxMiDTR8wr9x2k_3Eg92UyALlVwsz2U1P1OE7a6rgF7ub0ttm_1gzyX4DPHp8XgVEAa4",
+            "group_code": "df0ac3ee-d810-42bb-820e-961e8c3bb6bc"
+        },
+        {
+            "family_name": "Night Quota",
+            "family_code": "64e63f53-6889-4d12-a0b4-ef9ea77b9efc",
+            "is_enterprise": false,
+            "migration_type": "NONE",
+            "variant_code": "7a0c3e7e-d5b7-480a-b161-50301a9dcdfd",
+            "option_name": "Xtra Kuota",
+            "order": 1
+        }
+    ],
+    "payment_for": "SHARE_PACKAGE",
+    "ask_overwrite": false,
+    "overwrite_amount": 1200,
+    "token_confirmation_idx": 1,
+    "amount_idx": -1
+}
 ]
